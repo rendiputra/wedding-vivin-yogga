@@ -28,13 +28,14 @@ const { gallery } = weddingData;
         </div>
 
         <!-- Gallery Grid -->
-        <div class="gallery-grid">
+        <div class="gallery-grid" id="gallery-grid">
             {
                 gallery.map((item, index) => (
                     <div
-                        class="gallery-item"
+                        class="gallery-item cursor-pointer"
                         data-aos="zoom-in"
                         data-aos-delay={`${index * 100}`}
+                        data-gallery-index={index}
                     >
                         <img
                             src={item.src}
@@ -48,3 +49,215 @@ const { gallery } = weddingData;
         </div>
     </SectionContainer>
 </div>
+
+<!-- Lightbox Modal -->
+<div
+    id="lightbox-modal"
+    class="fixed inset-0 z-[200] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Image preview"
+>
+    <!-- Backdrop -->
+    <div
+        id="lightbox-backdrop"
+        class="absolute inset-0 bg-black/80 backdrop-blur-sm"
+    >
+    </div>
+
+    <!-- Close Button -->
+    <button
+        id="lightbox-close"
+        class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-accent-gold text-white flex items-center justify-center hover:bg-accent-gold-dark transition-colors duration-200 shadow-lg cursor-pointer"
+        aria-label="Close preview"
+    >
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- Previous Button -->
+    <button
+        id="lightbox-prev"
+        class="absolute left-3 md:left-6 z-10 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-accent-gold/80 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+        aria-label="Previous image"
+    >
+        <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+    </button>
+
+    <!-- Next Button -->
+    <button
+        id="lightbox-next"
+        class="absolute right-3 md:right-6 z-10 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-accent-gold/80 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+        aria-label="Next image"
+    >
+        <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+    </button>
+
+    <!-- Image Container -->
+    <div
+        id="lightbox-image-container"
+        class="relative z-[1] max-w-[90vw] max-h-[90vh] scale-95 transition-transform duration-300"
+    >
+        <img
+            id="lightbox-image"
+            src=""
+            alt=""
+            class="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl select-none"
+        />
+    </div>
+
+    <!-- Image counter -->
+    <div
+        id="lightbox-counter"
+        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-white/70 text-sm font-medium tracking-wider"
+        style="font-family: var(--font-sans);"
+    >
+    </div>
+</div>
+
+<script is:inline>
+    (function () {
+        const modal = document.getElementById("lightbox-modal");
+        const backdrop = document.getElementById("lightbox-backdrop");
+        const closeBtn = document.getElementById("lightbox-close");
+        const prevBtn = document.getElementById("lightbox-prev");
+        const nextBtn = document.getElementById("lightbox-next");
+        const lightboxImg = document.getElementById("lightbox-image");
+        const imageContainer = document.getElementById(
+            "lightbox-image-container",
+        );
+        const counter = document.getElementById("lightbox-counter");
+        const grid = document.getElementById("gallery-grid");
+
+        // Collect all gallery image sources
+        const items = grid.querySelectorAll("[data-gallery-index]");
+        const images = Array.from(items).map(function (el) {
+            const img = el.querySelector("img");
+            return { src: img.src, alt: img.alt };
+        });
+
+        let currentIndex = -1;
+        let isOpen = false;
+
+        function openLightbox(index) {
+            currentIndex = index;
+            isOpen = true;
+            showImage();
+            modal.classList.remove("opacity-0", "pointer-events-none");
+            modal.classList.add("opacity-100", "pointer-events-auto");
+            imageContainer.classList.remove("scale-95");
+            imageContainer.classList.add("scale-100");
+            document.body.style.overflow = "hidden";
+        }
+
+        function closeLightbox() {
+            isOpen = false;
+            modal.classList.add("opacity-0", "pointer-events-none");
+            modal.classList.remove("opacity-100", "pointer-events-auto");
+            imageContainer.classList.add("scale-95");
+            imageContainer.classList.remove("scale-100");
+            document.body.style.overflow = "";
+            currentIndex = -1;
+        }
+
+        function showImage() {
+            if (currentIndex < 0 || currentIndex >= images.length) return;
+            var data = images[currentIndex];
+            lightboxImg.src = data.src;
+            lightboxImg.alt = data.alt;
+            counter.textContent = currentIndex + 1 + " / " + images.length;
+        }
+
+        function navigate(direction) {
+            if (!isOpen) return;
+            currentIndex =
+                (currentIndex + direction + images.length) % images.length;
+            showImage();
+        }
+
+        // Click handlers on gallery items
+        items.forEach(function (item) {
+            item.addEventListener("click", function () {
+                var index = parseInt(item.dataset.galleryIndex, 10);
+                openLightbox(index);
+            });
+        });
+
+        // Close handlers
+        closeBtn.addEventListener("click", closeLightbox);
+        backdrop.addEventListener("click", closeLightbox);
+
+        // Nav handlers
+        prevBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            navigate(-1);
+        });
+        nextBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            navigate(1);
+        });
+
+        // Keyboard
+        document.addEventListener("keydown", function (e) {
+            if (!isOpen) return;
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowLeft") navigate(-1);
+            if (e.key === "ArrowRight") navigate(1);
+        });
+
+        // Swipe support for mobile
+        var touchStartX = 0;
+        var touchEndX = 0;
+        modal.addEventListener(
+            "touchstart",
+            function (e) {
+                touchStartX = e.changedTouches[0].screenX;
+            },
+            { passive: true },
+        );
+        modal.addEventListener(
+            "touchend",
+            function (e) {
+                touchEndX = e.changedTouches[0].screenX;
+                var diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    navigate(diff > 0 ? 1 : -1);
+                }
+            },
+            { passive: true },
+        );
+    })();
+</script>
