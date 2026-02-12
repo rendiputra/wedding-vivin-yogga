@@ -1,0 +1,165 @@
+---
+import SectionContainer from "./SectionContainer.astro";
+import { weddingData } from "../data/content";
+
+const { meta, event, couple } = weddingData;
+---
+
+<div class="bg-damask">
+    <SectionContainer id="footer">
+        <!-- Countdown Timer -->
+        <div class="text-center mb-12" data-aos="fade-up">
+            <p class="section-subtitle">Menghitung Hari</p>
+            <h2 class="section-title" style="font-family: var(--font-serif);">
+                Hitung Mundur
+            </h2>
+            <div class="ornament-divider mb-6">
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 20 20"
+                    class="text-accent-gold"
+                >
+                    <path
+                        d="M10 0L12.245 7.755L20 10L12.245 12.245L10 20L7.755 12.245L0 10L7.755 7.755L10 0Z"
+                        fill="currentColor"></path>
+                </svg>
+            </div>
+
+            <div class="countdown-box" id="countdown-timer">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="countdown-days">--</span>
+                    <span class="countdown-label">Hari</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="countdown-hours">--</span
+                    >
+                    <span class="countdown-label">Jam</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="countdown-minutes"
+                        >--</span
+                    >
+                    <span class="countdown-label">Menit</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="countdown-seconds"
+                        >--</span
+                    >
+                    <span class="countdown-label">Detik</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Qur'an Quote -->
+        <div class="mb-12" data-aos="fade-up" data-aos-delay="200">
+            <div
+                class="max-w-lg mx-auto text-center px-6 py-8 rounded-2xl bg-white/40 border border-accent-gold/20"
+            >
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    class="text-accent-gold/40 mx-auto mb-4"
+                    fill="currentColor"
+                >
+                    <path
+                        d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"
+                    ></path>
+                </svg>
+                <p
+                    class="text-text-muted text-sm italic leading-relaxed mb-4"
+                    style="font-family: var(--font-serif);"
+                >
+                    "{meta.quote}"
+                </p>
+                <p
+                    class="text-accent-gold-dark text-xs font-semibold tracking-wider uppercase"
+                >
+                    — {meta.quoteSource}
+                </p>
+            </div>
+        </div>
+
+        <!-- Closing -->
+        <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+            <p
+                class="text-text-dark text-base md:text-lg mb-2"
+                style="font-family: var(--font-serif);"
+            >
+                Wassalamu'alaikum Warahmatullahi Wabarakatuh
+            </p>
+            <p class="text-text-muted text-sm mb-4">
+                Merupakan suatu kehormatan dan kebahagiaan bagi kami<br />
+                apabila Bapak/Ibu/Saudara/i berkenan hadir.
+            </p>
+
+            <!-- Couple Names -->
+            <p
+                class="text-3xl md:text-4xl text-accent-gold-dark mt-6 mb-2"
+                style="font-family: var(--font-script);"
+            >
+                {couple.bride.nickname} & {couple.groom.nickname}
+            </p>
+
+            <div class="ornament-divider mt-4">
+                <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 20 20"
+                    class="text-accent-gold opacity-60"
+                >
+                    <path
+                        d="M10 0L12.245 7.755L20 10L12.245 12.245L10 20L7.755 12.245L0 10L7.755 7.755L10 0Z"
+                        fill="currentColor"></path>
+                </svg>
+            </div>
+
+            <!-- Credits -->
+            <p class="text-text-muted text-xs mt-6 opacity-60">
+                #VivinYogga2026
+            </p>
+            <p class="text-text-muted text-[10px] mt-1 opacity-40">
+                Made with ❤️
+            </p>
+        </div>
+    </SectionContainer>
+</div>
+
+<!-- Countdown Script -->
+<script is:inline define:vars={{ isoDate: event.isoDate }}>
+    function updateCountdown() {
+        const target = new Date(isoDate).getTime();
+        const now = new Date().getTime();
+        const diff = target - now;
+
+        if (diff <= 0) {
+            document.getElementById("countdown-days").textContent = "0";
+            document.getElementById("countdown-hours").textContent = "0";
+            document.getElementById("countdown-minutes").textContent = "0";
+            document.getElementById("countdown-seconds").textContent = "0";
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+            (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+        );
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown-days").textContent = days.toString();
+        document.getElementById("countdown-hours").textContent = hours
+            .toString()
+            .padStart(2, "0");
+        document.getElementById("countdown-minutes").textContent = minutes
+            .toString()
+            .padStart(2, "0");
+        document.getElementById("countdown-seconds").textContent = seconds
+            .toString()
+            .padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+</script>

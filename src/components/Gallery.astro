@@ -1,0 +1,50 @@
+---
+import SectionContainer from "./SectionContainer.astro";
+import { weddingData } from "../data/content";
+
+const { gallery } = weddingData;
+---
+
+<div class="bg-primary-cream-dark">
+    <SectionContainer id="gallery">
+        <!-- Section Title -->
+        <div class="text-center mb-8" data-aos="fade-up">
+            <p class="section-subtitle">Momen Bahagia Kami</p>
+            <h2 class="section-title" style="font-family: var(--font-serif);">
+                Galeri
+            </h2>
+            <div class="ornament-divider">
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 20 20"
+                    class="text-accent-gold"
+                >
+                    <path
+                        d="M10 0L12.245 7.755L20 10L12.245 12.245L10 20L7.755 12.245L0 10L7.755 7.755L10 0Z"
+                        fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Gallery Grid -->
+        <div class="gallery-grid">
+            {
+                gallery.map((item, index) => (
+                    <div
+                        class="gallery-item"
+                        data-aos="zoom-in"
+                        data-aos-delay={`${index * 100}`}
+                    >
+                        <img
+                            src={item.src}
+                            alt={item.alt}
+                            loading="lazy"
+                            decoding="async"
+                        />
+                    </div>
+                ))
+            }
+        </div>
+    </SectionContainer>
+</div>

@@ -1,17 +1,72 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import WelcomeOverlay from "../components/WelcomeOverlay";
+import AudioControl from "../components/AudioControl";
+import Hero from "../components/Hero.astro";
+import Couple from "../components/Couple.astro";
+import EventDetails from "../components/EventDetails.astro";
+import LocationMap from "../components/LocationMap.astro";
+import Gallery from "../components/Gallery.astro";
+import Footer from "../components/Footer.astro";
+import ScallopSeparator from "../components/ScallopSeparator.astro";
+import { weddingData } from "../data/content";
 
+const { couple, event, meta } = weddingData;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title={meta.title}>
+	<!-- Welcome Overlay -->
+	<WelcomeOverlay
+		client:load
+		coupleNames={`${couple.bride.nickname} & ${couple.groom.nickname}`}
+		date={event.date}
+	/>
+
+	<!-- Floating Audio Control -->
+	<AudioControl client:load audioSrc={meta.audio} />
+
+	<!-- Main Content -->
+	<main>
+		<!-- Hero Section -->
+		<Hero />
+
+		<!-- Scallop: cream → dark cream -->
+		<ScallopSeparator fillColor="var(--color-primary-cream-dark)" />
+
+		<!-- Couple Section -->
+		<Couple />
+
+		<!-- Scallop: dark cream → cream (flip) -->
+		<div class="bg-primary-cream-dark">
+			<ScallopSeparator fillColor="var(--color-primary-cream)" />
+		</div>
+
+		<!-- Event Details -->
+		<div class="bg-primary-cream">
+			<ScallopSeparator fillColor="var(--color-primary-cream-dark)" />
+		</div>
+		<EventDetails />
+
+		<!-- Scallop: primary-cream-dark → cream -->
+		<div class="bg-primary-cream-dark">
+			<ScallopSeparator fillColor="var(--color-primary-cream)" />
+		</div>
+
+		<!-- Location Map -->
+		<LocationMap />
+
+		<!-- Scallop: cream → dark cream -->
+		<ScallopSeparator fillColor="var(--color-primary-cream-dark)" />
+
+		<!-- Gallery -->
+		<Gallery />
+
+		<!-- Scallop: dark cream → cream -->
+		<div class="bg-primary-cream-dark">
+			<ScallopSeparator fillColor="var(--color-primary-cream)" />
+		</div>
+
+		<!-- Footer & Closing -->
+		<Footer />
+	</main>
+</Layout>

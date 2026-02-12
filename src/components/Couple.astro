@@ -1,0 +1,168 @@
+---
+import SectionContainer from "./SectionContainer.astro";
+import { weddingData } from "../data/content";
+
+const { bride, groom } = weddingData.couple;
+---
+
+<div class="bg-damask">
+    <SectionContainer id="couple">
+        <!-- Section Title -->
+        <div class="text-center mb-10" data-aos="fade-up">
+            <p class="section-subtitle">Dengan Rahmat Allah Yang Maha Esa</p>
+            <h2 class="section-title" style="font-family: var(--font-serif);">
+                Mempelai
+            </h2>
+            <div class="ornament-divider">
+                <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 20 20"
+                    class="text-accent-gold"
+                >
+                    <path
+                        d="M10 0L12.245 7.755L20 10L12.245 12.245L10 20L7.755 12.245L0 10L7.755 7.755L10 0Z"
+                        fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Couple Cards -->
+        <div
+            class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16"
+        >
+            <!-- Bride -->
+            <div class="text-center" data-aos="fade-right" data-aos-delay="100">
+                <div class="photo-frame mx-auto mb-4">
+                    <img
+                        src={bride.photo}
+                        alt={bride.fullName}
+                        loading="lazy"
+                    />
+                </div>
+                <h3
+                    class="text-3xl md:text-4xl text-accent-gold-dark mt-4 mb-1"
+                    style="font-family: var(--font-script);"
+                >
+                    {bride.nickname}
+                </h3>
+                <p
+                    class="text-text-dark text-sm font-medium mb-1"
+                    style="font-family: var(--font-serif);"
+                >
+                    {bride.fullName}
+                </p>
+                <p
+                    class="text-text-muted text-xs mb-3 leading-relaxed max-w-[220px] mx-auto"
+                >
+                    {bride.parents}
+                </p>
+                <a
+                    href={bride.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 text-accent-gold text-xs hover:text-accent-gold-dark transition-colors"
+                >
+                    <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
+                        ></rect>
+                        <path
+                            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                        ></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    {bride.instagram}
+                </a>
+            </div>
+
+            <!-- Ampersand Divider -->
+            <div
+                class="hidden md:flex items-center"
+                data-aos="zoom-in"
+                data-aos-delay="200"
+            >
+                <span
+                    class="text-5xl text-accent-gold opacity-60"
+                    style="font-family: var(--font-script);"
+                >
+                    &
+                </span>
+            </div>
+
+            <!-- Mobile Ampersand -->
+            <div
+                class="flex md:hidden items-center justify-center"
+                data-aos="zoom-in"
+            >
+                <span
+                    class="text-4xl text-accent-gold opacity-60"
+                    style="font-family: var(--font-script);"
+                >
+                    &
+                </span>
+            </div>
+
+            <!-- Groom -->
+            <div class="text-center" data-aos="fade-left" data-aos-delay="100">
+                <div class="photo-frame mx-auto mb-4">
+                    <img
+                        src={groom.photo}
+                        alt={groom.fullName}
+                        loading="lazy"
+                    />
+                </div>
+                <h3
+                    class="text-3xl md:text-4xl text-accent-gold-dark mt-4 mb-1"
+                    style="font-family: var(--font-script);"
+                >
+                    {groom.nickname}
+                </h3>
+                <p
+                    class="text-text-dark text-sm font-medium mb-1"
+                    style="font-family: var(--font-serif);"
+                >
+                    {groom.fullName}
+                </p>
+                <p
+                    class="text-text-muted text-xs mb-3 leading-relaxed max-w-[220px] mx-auto"
+                >
+                    {groom.parents}
+                </p>
+                <a
+                    href={groom.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 text-accent-gold text-xs hover:text-accent-gold-dark transition-colors"
+                >
+                    <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"
+                        ></rect>
+                        <path
+                            d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                        ></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                    {groom.instagram}
+                </a>
+            </div>
+        </div>
+    </SectionContainer>
+</div>
