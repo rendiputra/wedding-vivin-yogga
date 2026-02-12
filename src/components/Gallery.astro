@@ -1,48 +1,49 @@
 ---
 import SectionContainer from "./SectionContainer.astro";
-import { weddingData } from "../data/content";
+import { Image } from "astro:assets";
 
-const { gallery } = weddingData;
+// 1. Load semua gambar (Eager loading agar aman)
+const imageFiles = import.meta.glob(
+    "/src/assets/gallery/*.{jpeg,jpg,png,gif,JPG,JPEG}",
+    {
+        eager: true,
+    },
+);
+const galleryImages = Object.values(imageFiles).map((img: any) => img.default);
 ---
 
 <div class="bg-primary-cream-dark">
     <SectionContainer id="gallery">
-        <!-- Section Title -->
         <div class="text-center mb-8" data-aos="fade-up">
             <p class="section-subtitle">Momen Bahagia Kami</p>
             <h2 class="section-title" style="font-family: var(--font-serif);">
                 Galeri
             </h2>
-            <div class="ornament-divider">
-                <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 20 20"
-                    class="text-accent-gold"
-                >
-                    <path
-                        d="M10 0L12.245 7.755L20 10L12.245 12.245L10 20L7.755 12.245L0 10L7.755 7.755L10 0Z"
-                        fill="currentColor"></path>
-                </svg>
-            </div>
+            <div class="ornament-divider">...</div>
         </div>
 
-        <!-- Gallery Grid -->
-        <div class="gallery-grid" id="gallery-grid">
+        <div
+            class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4"
+            id="gallery-grid"
+        >
             {
-                gallery.map((item, index) => (
+                galleryImages.map((image, index) => (
                     <div
-                        class="gallery-item cursor-pointer"
+                        class="gallery-item cursor-pointer relative group overflow-hidden rounded-lg aspect-square shadow-md"
                         data-aos="zoom-in"
-                        data-aos-delay={`${index * 100}`}
+                        data-aos-delay={index * 100}
                         data-gallery-index={index}
+                        data-full-src={image.src}
                     >
-                        <img
-                            src={item.src}
-                            alt={item.alt}
-                            loading="lazy"
-                            decoding="async"
+                        <Image
+                            src={image}
+                            alt={`Gallery moment ${index + 1}`}
+                            width={400}
+                            quality={80}
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         />
+
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
                     </div>
                 ))
             }
@@ -53,22 +54,21 @@ const { gallery } = weddingData;
 <!-- Lightbox Modal -->
 <div
     id="lightbox-modal"
-    class="fixed inset-0 z-[200] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300"
+    class="fixed inset-0 z-[200] flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300"
     role="dialog"
     aria-modal="true"
     aria-label="Image preview"
 >
-    <!-- Backdrop -->
     <div
         id="lightbox-backdrop"
-        class="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        class="absolute inset-0 bg-black/90 backdrop-blur-sm"
     >
     </div>
 
     <!-- Close Button -->
     <button
         id="lightbox-close"
-        class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-accent-gold text-white flex items-center justify-center hover:bg-accent-gold-dark transition-colors duration-200 shadow-lg cursor-pointer"
+        class="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-accent-gold text-white flex items-center justify-center hover:bg-accent-gold-dark transition-colors duration-200 shadow-lg cursor-pointer"
         aria-label="Close preview"
     >
         <svg
@@ -86,10 +86,10 @@ const { gallery } = weddingData;
         </svg>
     </button>
 
-    <!-- Previous Button -->
+    <!-- Prev Button -->
     <button
         id="lightbox-prev"
-        class="absolute left-3 md:left-6 z-10 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-accent-gold/80 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+        class="absolute left-3 md:left-6 z-50 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-accent-gold/80 transition-all duration-200 backdrop-blur-sm cursor-pointer"
         aria-label="Previous image"
     >
         <svg
@@ -109,7 +109,7 @@ const { gallery } = weddingData;
     <!-- Next Button -->
     <button
         id="lightbox-next"
-        class="absolute right-3 md:right-6 z-10 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-accent-gold/80 transition-all duration-200 backdrop-blur-sm cursor-pointer"
+        class="absolute right-3 md:right-6 z-50 w-10 h-10 rounded-full bg-white/15 text-white flex items-center justify-center hover:bg-accent-gold/80 transition-all duration-200 backdrop-blur-sm cursor-pointer"
         aria-label="Next image"
     >
         <svg
@@ -129,13 +129,13 @@ const { gallery } = weddingData;
     <!-- Image Container -->
     <div
         id="lightbox-image-container"
-        class="relative z-[1] max-w-[90vw] max-h-[90vh] scale-95 transition-transform duration-300"
+        class="relative z-10 p-4 transition-transform duration-300 scale-90"
     >
         <img
             id="lightbox-image"
             src=""
             alt=""
-            class="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl select-none"
+            class="max-w-[90vw] max-h-[85vh] object-contain rounded-xl shadow-2xl select-none"
         />
     </div>
 
@@ -150,55 +150,52 @@ const { gallery } = weddingData;
 
 <script is:inline>
     (function () {
-        const modal = document.getElementById("lightbox-modal");
-        const backdrop = document.getElementById("lightbox-backdrop");
-        const closeBtn = document.getElementById("lightbox-close");
-        const prevBtn = document.getElementById("lightbox-prev");
-        const nextBtn = document.getElementById("lightbox-next");
-        const lightboxImg = document.getElementById("lightbox-image");
-        const imageContainer = document.getElementById(
-            "lightbox-image-container",
-        );
-        const counter = document.getElementById("lightbox-counter");
-        const grid = document.getElementById("gallery-grid");
+        var modal = document.getElementById("lightbox-modal");
+        var lightboxImg = document.getElementById("lightbox-image");
+        var container = document.getElementById("lightbox-image-container");
+        var counter = document.getElementById("lightbox-counter");
+        var grid = document.getElementById("gallery-grid");
 
-        // Collect all gallery image sources
-        const items = grid.querySelectorAll("[data-gallery-index]");
-        const images = Array.from(items).map(function (el) {
-            const img = el.querySelector("img");
-            return { src: img.src, alt: img.alt };
-        });
+        var items = grid.querySelectorAll("[data-gallery-index]");
+        var images = [];
+        for (var i = 0; i < items.length; i++) {
+            var el = items[i];
+            var img = el.querySelector("img");
+            images.push({
+                src: el.getAttribute("data-full-src"),
+                alt: img.alt,
+            });
+        }
 
-        let currentIndex = -1;
-        let isOpen = false;
+        var currentIndex = -1;
+        var isOpen = false;
+
+        function showImage() {
+            if (currentIndex < 0 || currentIndex >= images.length) return;
+            lightboxImg.src = images[currentIndex].src;
+            lightboxImg.alt = images[currentIndex].alt;
+            counter.textContent = currentIndex + 1 + " / " + images.length;
+        }
 
         function openLightbox(index) {
             currentIndex = index;
             isOpen = true;
             showImage();
             modal.classList.remove("opacity-0", "pointer-events-none");
-            modal.classList.add("opacity-100", "pointer-events-auto");
-            imageContainer.classList.remove("scale-95");
-            imageContainer.classList.add("scale-100");
+            container.classList.remove("scale-90");
+            container.classList.add("scale-100");
             document.body.style.overflow = "hidden";
         }
 
         function closeLightbox() {
             isOpen = false;
             modal.classList.add("opacity-0", "pointer-events-none");
-            modal.classList.remove("opacity-100", "pointer-events-auto");
-            imageContainer.classList.add("scale-95");
-            imageContainer.classList.remove("scale-100");
+            container.classList.remove("scale-100");
+            container.classList.add("scale-90");
             document.body.style.overflow = "";
-            currentIndex = -1;
-        }
-
-        function showImage() {
-            if (currentIndex < 0 || currentIndex >= images.length) return;
-            var data = images[currentIndex];
-            lightboxImg.src = data.src;
-            lightboxImg.alt = data.alt;
-            counter.textContent = currentIndex + 1 + " / " + images.length;
+            setTimeout(function () {
+                lightboxImg.src = "";
+            }, 300);
         }
 
         function navigate(direction) {
@@ -208,29 +205,37 @@ const { gallery } = weddingData;
             showImage();
         }
 
-        // Click handlers on gallery items
+        // Click gallery items
         items.forEach(function (item) {
             item.addEventListener("click", function () {
-                var index = parseInt(item.dataset.galleryIndex, 10);
-                openLightbox(index);
+                var idx = parseInt(item.getAttribute("data-gallery-index"), 10);
+                openLightbox(idx);
             });
         });
 
-        // Close handlers
-        closeBtn.addEventListener("click", closeLightbox);
-        backdrop.addEventListener("click", closeLightbox);
+        // Close
+        document
+            .getElementById("lightbox-close")
+            .addEventListener("click", closeLightbox);
+        document
+            .getElementById("lightbox-backdrop")
+            .addEventListener("click", closeLightbox);
 
-        // Nav handlers
-        prevBtn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            navigate(-1);
-        });
-        nextBtn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            navigate(1);
-        });
+        // Prev / Next
+        document
+            .getElementById("lightbox-prev")
+            .addEventListener("click", function (e) {
+                e.stopPropagation();
+                navigate(-1);
+            });
+        document
+            .getElementById("lightbox-next")
+            .addEventListener("click", function (e) {
+                e.stopPropagation();
+                navigate(1);
+            });
 
-        // Keyboard
+        // Keyboard: ESC, ←, →
         document.addEventListener("keydown", function (e) {
             if (!isOpen) return;
             if (e.key === "Escape") closeLightbox();
@@ -238,9 +243,8 @@ const { gallery } = weddingData;
             if (e.key === "ArrowRight") navigate(1);
         });
 
-        // Swipe support for mobile
+        // Touch swipe for mobile
         var touchStartX = 0;
-        var touchEndX = 0;
         modal.addEventListener(
             "touchstart",
             function (e) {
@@ -251,8 +255,7 @@ const { gallery } = weddingData;
         modal.addEventListener(
             "touchend",
             function (e) {
-                touchEndX = e.changedTouches[0].screenX;
-                var diff = touchStartX - touchEndX;
+                var diff = touchStartX - e.changedTouches[0].screenX;
                 if (Math.abs(diff) > 50) {
                     navigate(diff > 0 ? 1 : -1);
                 }

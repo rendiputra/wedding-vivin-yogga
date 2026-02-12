@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import WelcomeOverlay from "../components/WelcomeOverlay";
-import AudioControl from "../components/AudioControl";
+import WelcomeOverlay from "../components/WelcomeOverlay.astro";
+import AudioControl from "../components/AudioControl.astro";
 import Hero from "../components/Hero.astro";
 import Couple from "../components/Couple.astro";
 import EventDetails from "../components/EventDetails.astro";
@@ -11,19 +11,15 @@ import Footer from "../components/Footer.astro";
 import ScallopSeparator from "../components/ScallopSeparator.astro";
 import { weddingData } from "../data/content";
 
-const { couple, event, meta } = weddingData;
+const { meta } = weddingData;
 ---
 
 <Layout title={meta.title}>
 	<!-- Welcome Overlay -->
-	<WelcomeOverlay
-		client:load
-		coupleNames={`${couple.bride.nickname} & ${couple.groom.nickname}`}
-		date={event.date}
-	/>
+	<WelcomeOverlay />
 
 	<!-- Floating Audio Control -->
-	<AudioControl client:load audioSrc={meta.audio} />
+	<AudioControl />
 
 	<!-- Main Content -->
 	<main>

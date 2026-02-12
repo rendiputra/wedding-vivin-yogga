@@ -1,0 +1,66 @@
+---
+import { weddingData } from "../data/content";
+
+const audioSrc = weddingData.meta.audio;
+---
+
+<!-- Floating Audio Control — pure server-rendered, zero JS framework -->
+<button
+    id="audio-control-btn"
+    class="fixed bottom-6 right-6 z-50 p-1 rounded-full bg-primary-cream shadow-lg border-2 border-accent-gold hover:scale-110 transition-transform duration-300 cursor-pointer"
+    aria-label="Play music"
+>
+    <div id="vinyl-disc" class="vinyl-disc paused"></div>
+</button>
+
+<script is:inline define:vars={{ audioSrc }}>
+    (function () {
+        var audio = new Audio(audioSrc);
+        audio.loop = true;
+        audio.volume = 0.5;
+        // Preload only metadata to avoid blocking
+        audio.preload = "none";
+
+        var btn = document.getElementById("audio-control-btn");
+        var disc = document.getElementById("vinyl-disc");
+        var isPlaying = false;
+
+        function play() {
+            audio
+                .play()
+                .then(function () {
+                    isPlaying = true;
+                    disc.classList.remove("paused");
+                    disc.classList.add("playing");
+                    btn.setAttribute("aria-label", "Pause music");
+                })
+                .catch(function (err) {
+                    console.log("Audio play blocked:", err);
+                });
+        }
+
+        function pause() {
+            audio.pause();
+            isPlaying = false;
+            disc.classList.remove("playing");
+            disc.classList.add("paused");
+            btn.setAttribute("aria-label", "Play music");
+        }
+
+        // Auto-play when invitation is opened
+        window.addEventListener("openInvitation", function () {
+            audio.preload = "auto";
+            play();
+        });
+
+        // Toggle on click
+        btn.addEventListener("click", function () {
+            if (isPlaying) {
+                pause();
+            } else {
+                audio.preload = "auto";
+                play();
+            }
+        });
+    })();
+</script>

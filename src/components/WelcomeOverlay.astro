@@ -1,0 +1,128 @@
+---
+import { weddingData } from "../data/content";
+
+const { couple, event } = weddingData;
+const coupleNames = `${couple.bride.nickname} & ${couple.groom.nickname}`;
+const date = event.date;
+---
+
+<!-- Welcome Overlay — pure server-rendered HTML, zero JS framework needed -->
+<div id="welcome-overlay" class="envelope-overlay">
+    <!-- Envelope flap decorative triangle -->
+    <div class="envelope-flap"></div>
+
+    <!-- Gold corner ornaments -->
+    <div
+        class="absolute top-4 left-4 w-16 h-16 border-t-2 border-l-2 border-accent-gold opacity-50 rounded-tl-lg"
+    >
+    </div>
+    <div
+        class="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 border-accent-gold opacity-50 rounded-tr-lg"
+    >
+    </div>
+    <div
+        class="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 border-accent-gold opacity-50 rounded-bl-lg"
+    >
+    </div>
+    <div
+        class="absolute bottom-4 right-4 w-16 h-16 border-b-2 border-r-2 border-accent-gold opacity-50 rounded-br-lg"
+    >
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 text-center px-6">
+        <!-- Bismillah -->
+        <p
+            class="text-accent-gold text-sm tracking-[0.2em] uppercase mb-6"
+            style="font-family: var(--font-sans);"
+        >
+            بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ
+        </p>
+
+        <!-- The Wedding of -->
+        <p
+            class="text-text-muted text-base md:text-lg tracking-widest uppercase mb-2"
+            style="font-family: var(--font-serif);"
+        >
+            The Wedding of
+        </p>
+
+        <!-- Couple Names -->
+        <h1
+            class="text-5xl md:text-7xl mb-4 gold-gradient-text"
+            style="font-family: var(--font-script);"
+        >
+            {coupleNames}
+        </h1>
+
+        <!-- Ornament -->
+        <div class="ornament-divider mb-4">
+            <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                class="text-accent-gold"
+            >
+                <path
+                    d="M10 0L12.245 7.755L20 10L12.245 12.245L10 20L7.755 12.245L0 10L7.755 7.755L10 0Z"
+                    fill="currentColor"></path>
+            </svg>
+        </div>
+
+        <!-- Date -->
+        <p
+            class="text-text-dark text-sm md:text-base tracking-wider mb-8"
+            style="font-family: var(--font-serif);"
+        >
+            {date}
+        </p>
+
+        <!-- Guest greeting -->
+        <p class="text-text-muted text-xs tracking-wide mb-2">Kepada Yth.</p>
+        <p
+            class="text-text-dark text-sm md:text-base mb-8"
+            style="font-family: var(--font-serif);"
+        >
+            Bapak/Ibu/Saudara/i
+        </p>
+
+        <!-- Open Button — works INSTANTLY, no JS framework needed -->
+        <button id="open-invitation-btn" class="btn-gold animate-pulse-gold">
+            <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path
+                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                ></path>
+            </svg>
+            Buka Undangan
+        </button>
+    </div>
+</div>
+
+<script is:inline>
+    (function () {
+        var btn = document.getElementById("open-invitation-btn");
+        var overlay = document.getElementById("welcome-overlay");
+
+        btn.addEventListener("click", function () {
+            overlay.classList.add("closing");
+            document.body.classList.remove("overlay-open");
+
+            // Trigger audio playback
+            window.dispatchEvent(new CustomEvent("openInvitation"));
+
+            // Remove overlay from DOM after animation
+            setTimeout(function () {
+                overlay.remove();
+            }, 800);
+        });
+    })();
+</script>
