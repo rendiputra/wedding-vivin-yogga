@@ -2,7 +2,7 @@ export const weddingData = {
   couple: {
     bride: {
       nickname: "Vivin",
-      fullName: "Vivin Hanjayani S. Pd",
+      fullName: "Vivin Hanzayani S. Pd",
       parents: "Putri dari Bpk. Merry Ahmadi & Ibu Hadijah",
       instagram: "@vivinhnzy",
       instagramUrl: "https://instagram.com/vivinhnzy",
@@ -26,9 +26,11 @@ export const weddingData = {
     akad: "08.00 WIB",
     resepsi: "10.00 - 17.00 WIB",
     mapsUrl:
-      "https://www.google.com/maps/search/Graha+Prima+Desa+Satria+Jaya+Tambun+Utara+Bekasi",
+      "https://maps.app.goo.gl/Q4xFsH4CGKv7CFCY9",
     mapsEmbed:
-      "https://www.openstreetmap.org/export/embed.html?bbox=107.0%2C-6.3%2C107.1%2C-6.2&layer=mapnik",
+      "https://www.openstreetmap.org/export/embed.html?bbox=107.0516338190686%2C-6.226068508613773%2C107.0626338190686%2C-6.215068508613773&layer=mapnik&marker=-6.2205685086137725%2C107.0571338190686",
+    // mapsEmbed:
+    // "https://www.openstreetmap.org/export/embed.html?bbox=107.0%2C-6.3%2C107.1%2C-6.2&layer=mapnik",
   },
   meta: {
     title: "The Wedding of Vivin & Yogga",
@@ -38,11 +40,11 @@ export const weddingData = {
     quoteSource: "QS. Ar-Ruum: 21",
   },
   gallery: [
-    { src: "/images/gallery-1.png", alt: "Pre-wedding photo 1" },
-    { src: "/images/gallery-2.png", alt: "Pre-wedding photo 2" },
-    { src: "/images/gallery-3.png", alt: "Pre-wedding photo 3" },
-    { src: "/images/gallery-4.png", alt: "Pre-wedding photo 4" },
-    { src: "/images/gallery-5.png", alt: "Pre-wedding photo 5" },
-    { src: "/images/gallery-6.png", alt: "Pre-wedding photo 6" },
+    { src: "/images/gallery1.jpg", alt: "Pre-wedding photo 1" },
+    { src: "/images/gallery2.jpg", alt: "Pre-wedding photo 2" },
+    { src: "/images/gallery3.jpg", alt: "Pre-wedding photo 3" },
+    { src: "/images/gallery4.jpg", alt: "Pre-wedding photo 4" },
+    { src: "/images/gallery5.jpg", alt: "Pre-wedding photo 5" },
+    { src: "/images/gallery6.jpg", alt: "Pre-wedding photo 6" },
   ],
 } as const;
